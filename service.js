@@ -16,7 +16,7 @@ app.listen(port, async() => {
     console.log("Listening on port", port)
 });
 
-async function testquery() {
+async function testQuery() {
     await connection.connect();
     await connection.query("SELECT * FROM customer", function (error, result, field) {
         if (error) throw error;
@@ -25,7 +25,7 @@ async function testquery() {
     connection.end();
 }
 
-app.post("/query", async(request, response) => {
+app.get("/query", async(request, response) => {
     await connection.connect();
     try {
         await connection.query(request, function (error, result, field) {
@@ -35,6 +35,8 @@ app.post("/query", async(request, response) => {
     } catch {
         response.send("Query error");
         response.status(422);
-        console.log("Query error from client")
+        console.log("Query error from client");
     }
 });
+
+testQuery();
