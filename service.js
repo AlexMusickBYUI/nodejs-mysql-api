@@ -1,6 +1,9 @@
 const express = require('express');
 const app = express();
 const mysql = require('mysql');
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.json());
 
 const port = 50001
 
@@ -17,19 +20,18 @@ app.listen(port, async() => {
 });
 
 async function testQuery() {
-    await connection.connect();
     await connection.query("SELECT * FROM customer", function (error, result, field) {
         if (error) throw error;
         console.log(result[0]);
     })
-    connection.end();
 }
 
 app.get("/query", async(request, response) => {
-    await connection.connect();
+    query = request.body.query;
+    console.log(query);
     try {
-        await connection.query(request, function (error, result, field) {
-            response.send(result);
+        await connection.query(query, function (error, result, field) {
+            response.send(result[0]);
             response.status(200);
         })
     } catch {
@@ -38,5 +40,3 @@ app.get("/query", async(request, response) => {
         console.log("Query error from client");
     }
 });
-
-testQuery();

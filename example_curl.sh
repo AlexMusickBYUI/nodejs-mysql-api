@@ -1,0 +1,1 @@
+curl -d "@example_query.json" -X GET http://localhost:50001/query -H "content-type:application/json"
